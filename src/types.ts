@@ -20,3 +20,12 @@ export interface AuditFormData {
   primaryUseCase: 'coding' | 'writing' | 'data' | 'research' | 'mixed';
   tools: Record<ToolName, ToolSpend>;
 }
+
+export interface LeadCaptureInput {
+  email: string;
+  companyName?: string;
+  role?: string;
+  teamSize: number;
+  calculatedMonthlySavings: number;
+  calculatedAnnualSavings: number;
+}
