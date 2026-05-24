@@ -1,11 +1,14 @@
 import React from 'react';
-import { usePersistentForm } from '../hooks/usePersistentForm';
-import { type ToolName } from '../types';
+import { type ToolName, type AuditFormData } from '../types';
 
-export default function SpendForm() {
-  const [formData, setFormData] = usePersistentForm();
+interface SpendFormProps {
+  formData: AuditFormData;
+  setFormData: React.Dispatch<React.SetStateAction<AuditFormData>>;
+}
 
-  const handleMetadataChange = (field: 'companySize' | 'primaryUseCase', value: any) => {
+export default function SpendForm({ formData, setFormData }: SpendFormProps) {
+  
+  const handleMetadataChange = (field: 'companySize' | 'primaryUseCase' | 'currency', value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -32,16 +35,16 @@ export default function SpendForm() {
   return (
     <div className="max-w-3xl mx-auto my-10 p-8 bg-slate-900 border border-slate-800 rounded-2xl text-slate-100 shadow-2xl">
       <header className="mb-8 border-b border-slate-800 pb-6">
-        <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+        <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 tracking-tight">
           AI Spend Audit Engine
         </h1>
         <p className="text-slate-400 mt-2 text-sm">
-          Analyze your runtime cloud workspace and team licensing costs instantly.
+          Expose redundant software footprints and seat-minimum overcharges instantly.
         </p>
       </header>
 
-      {/* Team Metadata Section */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      {/* Metadata Control Row */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div>
           <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Total Team Size</label>
           <input
@@ -49,27 +52,39 @@ export default function SpendForm() {
             min="1"
             value={formData.companySize}
             onChange={(e) => handleMetadataChange('companySize', parseInt(e.target.value) || 1)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-emerald-500 transition-all"
           />
         </div>
+
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Primary Work Use-Case</label>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Display Currency</label>
+          <select
+            value={formData.currency}
+            onChange={(e) => handleMetadataChange('currency', e.target.value)}
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-emerald-500 transition-all cursor-pointer"
+          >
+            <option value="USD">USD ($) - Global Corporate</option>
+            <option value="INR">INR (₹) - Regional Localized</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Primary Use-Case</label>
           <select
             value={formData.primaryUseCase}
             onChange={(e) => handleMetadataChange('primaryUseCase', e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-emerald-500 transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-100 focus:outline-none focus:border-emerald-500 transition-all cursor-pointer"
           >
-            <option value="mixed">Mixed Frameworks </option>
-            <option value="coding">Software Engineering / Coding </option>
-            <option value="writing">Content Writing / Copywriting </option>
-            <option value="data">Data Analysis & BI </option>
-            <option value="research">Academic & Market Research </option>
+            <option value="mixed">Mixed Architecture</option>
+            <option value="coding">Software Engineering</option>
+            <option value="writing">Content Generation</option>
+            <option value="data">Data Analytics & BI</option>
           </select>
         </div>
       </section>
 
-      {/* Dynamic Tools Section */}
-      <h2 className="text-lg font-bold text-slate-300 mb-4">Select Active Infrastructure Subscriptions</h2>
+      {/* Interactive Tool Parameter Cards */}
+      <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Active Infrastructure Trackers</h2>
       <div className="space-y-4">
         {(Object.keys(formData.tools) as ToolName[]).map((toolName) => {
           const tool = formData.tools[toolName];
@@ -77,7 +92,7 @@ export default function SpendForm() {
             <div
               key={toolName}
               className={`p-5 rounded-xl border transition-all duration-200 ${
-                tool.selected ? 'bg-slate-950/60 border-emerald-500/40 shadow-lg shadow-emerald-500/5' : 'bg-slate-950/30 border-slate-800/80 hover:border-slate-700'
+                tool.selected ? 'bg-slate-950/80 border-emerald-500/30 shadow-lg shadow-emerald-500/2' : 'bg-slate-950/20 border-slate-800/60 hover:border-slate-800'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -93,19 +108,34 @@ export default function SpendForm() {
               </div>
 
               {tool.selected && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 pt-5 border-t border-slate-800/60">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5 pt-5 border-t border-slate-800/80">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Plan Plan</label>
-                    <input
-                      type="text"
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Plan Tier</label>
+                    <select
                       value={tool.plan}
-                      placeholder="Pro, Team, Enterprise"
                       onChange={(e) => handleToolFieldChange(toolName, 'plan', e.target.value)}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
-                    />
+                      className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500 cursor-pointer"
+                    >
+                      {toolName === 'Claude' || toolName === 'ChatGPT' ? (
+                        <>
+                          <option value="Individual">Individual Tier</option>
+                          <option value="Team">Team Tier</option>
+                        </>
+                      ) : toolName.includes('API direct') ? (
+                        <option value="API direct">API Metered Usage</option>
+                      ) : (
+                        <>
+                          <option value="Individual">Individual Plus</option>
+                          <option value="Enterprise">Enterprise Spec</option>
+                        </>
+                      )}
+                    </select>
                   </div>
+                  
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Monthly Spend ($)</label>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                      Monthly Spend ({formData.currency === 'INR' ? '₹' : '$'})
+                    </label>
                     <input
                       type="number"
                       min="0"
@@ -115,8 +145,9 @@ export default function SpendForm() {
                       className="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-sm text-slate-100 focus:outline-none focus:border-emerald-500"
                     />
                   </div>
+
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Seats Active</label>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Seats Provisioned</label>
                     <input
                       type="number"
                       min="1"

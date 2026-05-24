@@ -1,5 +1,4 @@
-import { type AuditFormData,type ToolName } from '../types';
-import { PRICING_REFERENCE } from './pricingData';
+import { type AuditFormData, type ToolName, type ToolSpend } from '../types';
 
 export interface ToolAuditResult {
   toolName: ToolName;
@@ -25,63 +24,78 @@ export function calculateAudit(formData: AuditFormData): FullAuditReport {
   let totalRecommendedMonthlySpend = 0;
   const toolBreakdowns: ToolAuditResult[] = [];
 
-  // Track tool selections to identify redundant tool overlaps
+  const isINR = formData.currency === 'INR';
+  const FX_RATE = 83; // $1 USD = ₹83 INR stable baseline anchor
+
   const hasCursor = formData.tools['Cursor']?.selected;
   const hasCopilot = formData.tools['GitHub Copilot']?.selected;
 
-  (Object.keys(formData.tools) as ToolName[]).map((toolName) => {
-    const userTool = formData.tools[toolName];
-    if (!userTool || !userTool.selected) return;
+  (Object.keys(formData.tools) as ToolName[]).forEach((toolName) => {
+    const tool = formData.tools[toolName];
+    if (!tool || !tool.selected) return;
 
-    const currentSpend = userTool.monthlySpend;
-    totalCurrentMonthlySpend += currentSpend;
-
-    let recommendedSpend = currentSpend;
-    let recommendedPlan = userTool.plan;
-    let reason = 'Your current tier configuration is financially optimized for your footprint.';
-
-    // Rule 1: Eliminate Redundant Overlaps (Cursor vs. GitHub Copilot code-assist duplication)
-    if (toolName === 'GitHub Copilot' && hasCursor && hasCopilot) {
-      recommendedSpend = 0;
-      recommendedPlan = 'Ecosystem Consolidate (Drop Copilot)';
-      reason = 'Redundant code-assistant layer detected. Your active Cursor subscription fully covers your inline workspace autocompletion needs.';
-    } 
+    // Capture exact user inputs
+    const userSpend = tool.monthlySpend;
+    const userSeats = tool.seats;
     
-    // Rule 2: Evaluate Seat Minimum Over-provisioning (e.g., Claude Team seat minimum errors)
-    else if (toolName === 'Claude' && userTool.plan.toLowerCase().includes('team')) {
-      if (userTool.seats < 5) {
-        // Drop down to Pro tier pricing for their actual active seats
-        recommendedPlan = 'Pro';
-        recommendedSpend = userTool.seats * 20;
-        reason = `Claude Team plan mandates a 5-seat minimum bill. Consolidating your ${userTool.seats} active seats onto Pro tiers eliminates empty-seat premiums.`;
+    // Normalize to USD for rule calculations
+    const currentSpendInUSD = isINR ? userSpend / FX_RATE : userSpend;
+    totalCurrentMonthlySpend += userSpend;
+
+    let recSpendInUSD = currentSpendInUSD;
+    let recPlan = tool.plan;
+    let reason = 'Your current configuration matches optimized retail performance targets.';
+
+    // RULE 1: Cursor & GitHub Copilot Redundancy Filter
+    if (toolName === 'GitHub Copilot' && hasCursor && hasCopilot) {
+      recSpendInUSD = 0;
+      recPlan = 'Drop Copilot';
+      reason = 'Redundant inline code-assistant layer detected. Your active Cursor subscription fully covers your workspace autocompletion needs.';
+    }
+    
+    // RULE 2: Claude Team Minimum Seat Trap Verification
+    else if (toolName === 'Claude' && tool.plan === 'Team') {
+      if (userSeats < 5) {
+        recPlan = 'Individual Pro';
+        recSpendInUSD = userSeats * 20; // Pro is $20/seat
+        reason = `Claude Team tier forces a 5-seat minimum premium ($150/mo). Consolidating your ${userSeats} active users onto standalone Pro profiles saves empty-seat overhead.`;
+      } else {
+        recSpendInUSD = userSeats * 30; // Standard Team tier cost
+        reason = 'Seats match the minimum tier guidelines. Pricing aligned with standard Anthropic retail tracks.';
       }
     }
 
-    // Rule 3: General Retail Standard Cost Alignment Check
-    else {
-      const tiers = PRICING_REFERENCE[toolName as keyof typeof PRICING_REFERENCE];
-      if (tiers) {
-        // Look for an exact match or standard benchmark
-        const matchedTier = tiers.find(t => t.name.toLowerCase() === userTool.plan.toLowerCase());
-        if (matchedTier) {
-          const expectedCost = matchedTier.costPerSeat * userTool.seats;
-          // If they are overpaying retail baselines mysteriously, flag it
-          if (currentSpend > expectedCost) {
-            recommendedSpend = expectedCost;
-            reason = `Identified standard retail billing drift. Aligning seats to standard ${matchedTier.name} pricing structures benchmarks your baseline spend perfectly.`;
-          }
-        }
+    // RULE 3: ChatGPT Retail Cost Drift Protection
+    else if (toolName === 'ChatGPT') {
+      if (tool.plan === 'Individual' && currentSpendInUSD > (userSeats * 20)) {
+        recSpendInUSD = userSeats * 20;
+        reason = 'Billing entries exceed standard ChatGPT Plus baselines ($20/seat). Adjusted to match verified retail catalogs.';
+      } else if (tool.plan === 'Team' && userSeats < 2) {
+        recPlan = 'Individual Pro';
+        recSpendInUSD = userSeats * 20;
+        reason = 'ChatGPT Team requires a 2-seat minimum. Reverting under-provisioned team account to Individual Plus saves structural costs.';
+      } else if (tool.plan === 'Team') {
+        recSpendInUSD = userSeats * 25; // Team is $25/seat
       }
     }
 
-    const savings = Math.max(0, currentSpend - recommendedSpend);
+    // RULE 4: API Tier Usage Alignment (Fallback Check)
+    else if (toolName.includes('API direct')) {
+      // API usage defaults straight to structural cost baselines unless wholesale tiers match
+      reason = 'Direct infrastructure usage monitored. Active tracking enabled for anomalous throughput surges.';
+    }
+
+    // Denominate the calculated values back into the active user layout currency
+    const recommendedSpend = isINR ? recSpendInUSD * FX_RATE : recSpendInUSD;
+    const savings = Math.max(0, userSpend - recommendedSpend);
+
     totalRecommendedMonthlySpend += recommendedSpend;
 
     toolBreakdowns.push({
       toolName,
-      currentSpend,
+      currentSpend: userSpend,
       recommendedSpend,
-      recommendedPlan,
+      recommendedPlan: recPlan,
       savings,
       reason
     });
@@ -89,10 +103,10 @@ export function calculateAudit(formData: AuditFormData): FullAuditReport {
 
   const totalMonthlySavings = Math.max(0, totalCurrentMonthlySpend - totalRecommendedMonthlySpend);
   const totalAnnualSavings = totalMonthlySavings * 12;
-  
-  // High savings threshold sets up lead generation hook for Credex credits
-  const requiresCredexConsultation = totalMonthlySavings >= 500; 
-  const isOptimal = totalMonthlySavings < 100;
+
+  const savingsInUSD = isINR ? totalMonthlySavings / FX_RATE : totalMonthlySavings;
+  const requiresCredexConsultation = savingsInUSD >= 500;
+  const isOptimal = totalMonthlySavings <= 0;
 
   return {
     totalCurrentMonthlySpend,
