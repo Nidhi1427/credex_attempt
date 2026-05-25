@@ -60,7 +60,8 @@ export default function SpendForm({ formData, setFormData, onRunAudit }: SpendFo
         <span style={{ fontSize: '10px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#34d399', backgroundColor: 'rgba(16, 185, 129, 0.1)', padding: '4px 12px', borderRadius: '9999px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
           SaaS Spend Intelligence
         </span>
-        <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#ffffff', margin: '12px 0 4px 0', tracking: '-0.025em' }}>
+        {/* FIXED: Changed tracking to letterSpacing here */}
+        <h1 style={{ fontSize: '24px', fontWeight: '800', color: '#ffffff', margin: '12px 0 4px 0', letterSpacing: '-0.025em' }}>
           AI Spend Audit Console
         </h1>
         <p style={{ fontSize: '13px', color: '#94a3b8', margin: 0, lineHeight: '1.5' }}>
@@ -107,7 +108,6 @@ export default function SpendForm({ formData, setFormData, onRunAudit }: SpendFo
         {/* Active Tool List Tracker Tray */}
         <h2 style={{ fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94a3b8', marginBottom: '12px', paddingLeft: '2px' }}>Active Software Traces</h2>
         
-        {/* CRITICAL FIX: Explicitly locked heights and scrolling styles using basic HTML properties */}
         <div style={{ maxHeight: '280px', overflowY: 'auto', paddingRight: '4px', marginBottom: '24px' }}>
           {(Object.keys(formData.tools) as ToolName[]).map((toolName) => {
             const tool = formData.tools[toolName];
@@ -180,7 +180,7 @@ export default function SpendForm({ formData, setFormData, onRunAudit }: SpendFo
           })}
         </div>
 
-        {/* The Action Button: Welded safely right here inside the layout box */}
+        {/* Action Button */}
         <div style={{ paddingTop: '16px', borderTop: '1px solid #1e293b' }}>
           <button
             type="button"
