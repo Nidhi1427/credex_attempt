@@ -21,3 +21,12 @@ export interface AuditFormData {
   currency: 'USD' | 'INR';
   tools: Record<ToolName, ToolSpend>;
 }
+
+export interface LeadCaptureInput {
+  email: string;
+  companyName?: string;
+  role?: string;
+  teamSize: number;
+  calculatedMonthlySavings: number;
+  calculatedAnnualSavings: number;
+}

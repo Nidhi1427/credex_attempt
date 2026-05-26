@@ -1,36 +1,36 @@
-# Operational Unit Economics & Runway Targets
+## 1. Architectural Strategy Statement
+The core value proposition of the AI Spend Audit Engine is exposing the invisible financial overhead tech companies absorb due to overlapping assistant footprints, misconfigured license tiers, and unutilized corporate seats. 
 
-## 1. Value of a Converted Lead to Credex
-[cite_start]When an audit surfaces significant waste ($>500/\text{mo}$), that startup becomes an ideal profile for Credex wholesale credit packages[cite: 30, 70]. 
+By analyzing user data entirely within localized browser memory vectors, we build trust immediately, preparing users for downstream premium corporate placement advisory funnels.
 
-* **Average Startup Annual AI Spend**: $15,000 (Licenses + API Usage).
-* **Credex Contract Volume**: Sells infrastructure credits at a blended margin.
-* **Estimated Customer Lifetime Value (LTV)**: Assuming an average contract size, a closed lead yields approximately **$3,000 in gross margin lifetime value** to Credex based on recurring credit usage cycles.
+---
 
-## 2. Customer Acquisition Cost (CAC) Matrix
-[cite_start]Because our GTM strategy relies entirely on organic channels and programmatic growth loops, our initial direct marketing ad spend is $0. 
-* **Organic Channel CAC**: ~$0.
-* [cite_start]**Operational Server & API Cost Per Audit**: Less than $0.05 per run (lightweight Vite static assets + minimal token usage for the 100-word summary text)[cite: 75].
-* **Blended Effective CAC**: Safe estimate of **$15 per closed customer** when factoring in developer execution hours spent on community outreach.
+## 2. Hardcoded Retail Pricing Engine Metrics
+The analytical execution engine runs all deterministic waste calculations against these verified commercial software pricing matrix tiers:
 
-## 3. Targeted Pipeline Conversion Funnel
-[cite_start]To operate as a highly profitable lead-generation vehicle for Credex, the application's funnel must maintain these minimum benchmarks[cite: 184]:
+| Tool Platform Identifier | Plan Tier Target | Fixed Cost Profile (USD) | Fixed Cost Profile (INR) |
+| :--- | :--- | :--- | :--- |
+| **Cursor** | Individual Pro/Plus | \$22 / month per seat | ₹1,850 / month per seat |
+| **GitHub Copilot** | Individual / Team | \$10 / month per seat | ₹840 / month per seat |
+| **ChatGPT** | Plus / Individual | \$20 / month per seat | ₹1,680 / month per seat |
+| **Claude** | Pro / Individual | \$20 / month per seat | ₹1,680 / month per seat |
+| **OpenAI / Anthropic API**| Direct Metered | \$0 (Pay-as-you-go) | ₹0 (Pay-as-you-go) |
 
-| Funnel Stage | Minimum Target Conversion Rate |
-| :--- | :--- |
-| **Audit Completed** | 100% (Baseline) |
-| **Email Captured (Lead Gate)** | 25% |
-| **High-Savings Consult Booked** | [cite_start]8% (Of high-waste segments) [cite: 30, 70] |
-| **Credit Package Purchase (Closed Deal)** | 15% (Of consults booked) |
+---
 
-$$\text{Minimum Viable Conversion} = \text{Audit} \longrightarrow \text{Lead (25\%)} \longrightarrow \text{Consult (8\%)} \longrightarrow \text{Close (15\%)} = 0.3\% \text{ End-to-End Funnel Yield}$$
+## 3. Core Algorithmic Optimization & Reduction Rules
 
-With an LTV of $3,000, achieving an end-to-end efficiency rate of just 0.3% generates **$9.00 in value for every single unique audit completed**, vastly outperforming the negligible infrastructure cost of running the web page.
+### Rule Vector A: The Developer Assistant Redundancy Loop
+- **Trigger Scenario:** User flags `Cursor` == true AND `GitHub Copilot` == true simultaneously within the tool selection tray.
+- **Algorithmic Evaluation:** Cursor incorporates state-of-the-art predictive autocompletions directly into its customized editing binary natively. Running active Copilot extensions alongside it creates a 100% feature-set overlap.
+- **Financial Redirection:** The engine flags the full monthly cost of the Copilot seats as pure waste. It sets the Copilot `recommendedPlan` string to "Consolidate", drops its recommended target spend to \$0, and adds the difference to `totalMonthlySavings`.
 
-## 4. The Path to $1M ARR in 18 Months
-[cite_start]To hit an annual recurring revenue run rate of $1,000,000 within 18 months, the tool must drive a fixed volume of closed deals[cite: 185]:
+### Rule Vector B: Automated Subscription Seat Optimization
+- **Trigger Scenario:** The user enters a `Seats Active` value that exceeds their declared core `Team Footprint` size parameter.
+- **Algorithmic Evaluation:** Identifies idle licensing overhead where organizations continue paying recurring monthly premiums for unassigned or unlogged contractor seats.
+- **Financial Redirection:** Automatically recalibrates the target baseline to match the actual team size parameters, calculating the unassigned seat overhead as immediate recoverable monthly capital runway.
 
-* **Target ARR**: $1,000,000 / year.
-* **Required Monthly Closed Revenue**: ~$83,333 / month.
-* **Deals Closed Per Month**: At an average contract margin value of $3,000, we must close **~28 startups per month** onto Credex infrastructure plans.
-* **Required Audit Footprint**: Working backward through our funnel conversion framework, the tool must process **9,333 completed audits monthly** (~311 audits per day). [cite_start]This is a highly achievable target via organic viral loops and dynamic Open Graph image screenshots shared on public platforms[cite: 40, 73, 93].
+### Rule Vector C: Fixed Plans vs. Metered API Pipelines
+- **Trigger Scenario:** The user selects a high-volume developer tool layout block like `OpenAI API direct` or `Anthropic API direct`.
+- **Algorithmic Evaluation:** For erratic automated backend workflows or data processing tasks, flat-rate workspace tiers enforce high minimum commitments. 
+- **Financial Redirection:** Guides users to drop fixed seats entirely, showing them how to route connections directly through pay-as-you-go API keys to reduce infrastructure spend down to actual utilization metrics.
