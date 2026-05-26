@@ -1,33 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-html, body, #root {
+body {
   margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
-  background-color: #060811; /* Rich midnight matte background */
-  color: #f1f5f9;
-  font-family: system-ui, -apple-system, sans-serif;
-  box-sizing: border-box;
-}
-
-*, ::before, ::after {
-  box-sizing: border-box;
-}
-
-/* Custom internal container scroll configurations */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: #070a12;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background-color: #0d111c;
 }
